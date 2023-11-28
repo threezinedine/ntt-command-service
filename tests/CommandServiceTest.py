@@ -87,3 +87,13 @@ class CommandServiceTest(unittest.TestCase):
             self.serCommandService.Undo()
 
         self.assertEqual(str(context.exception), "Command Service has no command") 
+
+    def test_GivenCommandServiceWithoutAnyCommand_WhenAddNew_ThenTheStateChangedSignalIsEmitted(self):
+        testCallback = Mock()
+        self.serCommandService.Connect(testCallback)
+
+        testCommand_1 = Mock(spec=ICommand)
+        testCommand_1.CanExecute.return_value = True
+        self.serCommandService.AddCommand(testCommand_1)
+
+        testCallback.assert_called_once()

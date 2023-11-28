@@ -2,9 +2,10 @@ from typing import *
 from .ICommand import ICommand
 from .ICommandService import ICommandService
 from .Exceptions import *
+from ntt_signal import *
 
 
-class CommandService(ICommandService):
+class CommandService(Signal, ICommandService):
     def __init__(self) -> None:
         super().__init__()
 
@@ -14,6 +15,7 @@ class CommandService(ICommandService):
         if iCommand.CanExecute():
             iCommand.Execute()
             self._iCommands.append(iCommand)
+            self.Emit()
 
     def Undo(self) -> None:
         if self.CanUndo():

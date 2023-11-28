@@ -18,3 +18,7 @@ class ICommandService(ABC):
     @abstractmethod
     def Clear(self) -> None:
         pass
+
+    @abstractmethod
+    def Connect(self, callback: callable) -> None:
+        pass
