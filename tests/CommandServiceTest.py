@@ -97,3 +97,14 @@ class CommandServiceTest(unittest.TestCase):
         self.serCommandService.AddCommand(testCommand_1)
 
         testCallback.assert_called_once()
+
+    def test_GivenCommandServiceWithoutAnyCommand_WhenAddNewAndUndo_ThenTheStateChangedSignalIsEmittedTwice(self):
+        testCallback = Mock()
+        testCommand_1 = Mock(spec=ICommand)
+        testCommand_1.CanExecute.return_value = True
+        self.serCommandService.AddCommand(testCommand_1)
+        self.serCommandService.Connect(testCallback)
+
+        self.serCommandService.Undo()
+
+        testCallback.assert_called_once()

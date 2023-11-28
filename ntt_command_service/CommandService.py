@@ -21,6 +21,7 @@ class CommandService(Signal, ICommandService):
         if self.CanUndo():
             self._iCommands[-1].Undo()
             self._iCommands.pop()
+            self.Emit()
         else:
             raise CommandServiceEmptyError("Command Service has no command")
 
