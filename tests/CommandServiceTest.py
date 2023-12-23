@@ -17,7 +17,9 @@ class CommandServiceTest(unittest.TestCase):
 
         testCommand.Execute.assert_called_once()
 
-    def test_GivenACommandButCannotExecute_WhenBeAddedIntoCommandService_ThenItIsNotExecuted(self):
+    def test_GivenACommandButCannotExecute_WhenBeAddedIntoCommandService_ThenItIsNotExecuted(
+        self,
+    ):
         testCommand = Mock(spec=ICommand)
         testCommand.CanExecute.return_value = False
 
@@ -33,7 +35,9 @@ class CommandServiceTest(unittest.TestCase):
         self.serCommandService.Undo()
         testCommand.Undo.assert_called_once()
 
-    def test_GivenACommandButCannotBeExecuted_WhenAddAndUndo_ThenTheCommandUndoIsNotCalled(self):
+    def test_GivenACommandButCannotBeExecuted_WhenAddAndUndo_ThenTheCommandUndoIsNotCalled(
+        self,
+    ):
         testCommand_1 = Mock(spec=ICommand)
         testCommand_1.CanExecute.return_value = True
         testCommand_2 = Mock(spec=ICommand)
@@ -81,14 +85,15 @@ class CommandServiceTest(unittest.TestCase):
 
         self.serCommandService.Clear()
 
-
     def test_GivenCommandServiceCanNotUndo_WhenUndo_ThenRaiseError(self):
         with self.assertRaises(CommandServiceEmptyError) as context:
             self.serCommandService.Undo()
 
-        self.assertEqual(str(context.exception), "Command Service has no command") 
+        self.assertEqual(str(context.exception), "Command Service has no command")
 
-    def test_GivenCommandServiceWithoutAnyCommand_WhenAddNew_ThenTheStateChangedSignalIsEmitted(self):
+    def test_GivenCommandServiceWithoutAnyCommand_WhenAddNew_ThenTheStateChangedSignalIsEmitted(
+        self,
+    ):
         testCallback = Mock()
         self.serCommandService.Connect(testCallback)
 
@@ -98,7 +103,9 @@ class CommandServiceTest(unittest.TestCase):
 
         testCallback.assert_called_once()
 
-    def test_GivenCommandServiceWithoutAnyCommand_WhenAddNewAndUndo_ThenTheStateChangedSignalIsEmittedTwice(self):
+    def test_GivenCommandServiceWithoutAnyCommand_WhenAddNewAndUndo_ThenTheStateChangedSignalIsEmittedTwice(
+        self,
+    ):
         testCallback = Mock()
         testCommand_1 = Mock(spec=ICommand)
         testCommand_1.CanExecute.return_value = True
@@ -108,3 +115,25 @@ class CommandServiceTest(unittest.TestCase):
         self.serCommandService.Undo()
 
         testCallback.assert_called_once()
+
+    def test_GivenCommandServiceWithoutAnyCommand_WhenClear_ThenTheStateChangedSignalIsEmittedTwice(
+        self,
+    ):
+        testCallback = Mock()
+        testCommand_1 = Mock(spec=ICommand)
+        testCommand_1.CanExecute.return_value = True
+        self.serCommandService.AddCommand(testCommand_1)
+        self.serCommandService.Connect(testCallback)
+
+        self.serCommandService.Clear()
+
+        testCallback.assert_called_once()
+
+    def test_GivenServiceWithoutAnyCommand_WhenClear_ThenSignalIsNotEmitted(self):
+        testCallback = Mock()
+
+        self.serCommandService.Connect(testCallback)
+
+        self.serCommandService.Clear()
+
+        testCallback.assert_not_called()
