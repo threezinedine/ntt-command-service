@@ -8,7 +8,7 @@ def load_readme():
 
 setup(
     name="ntt-command-service",
-    version="1.0.3",
+    version="1.0.4",
     packages=find_packages(),
     install_requires=["ntt-signal", "ntt-observable-list"],
     author="threezinedine",

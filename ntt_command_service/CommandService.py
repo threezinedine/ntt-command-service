@@ -29,6 +29,7 @@ class CommandService(Signal, ICommandService):
         return len(self._iCommands) != 0
 
     def Clear(self) -> None:
-        if self.CanUndo():
-            self.Emit()
+        bCanUndo = self.CanUndo()
         self._iCommands = []
+        if bCanUndo:
+            self.Emit()
