@@ -33,3 +33,6 @@ class CommandService(Signal, ICommandService):
         self._iCommands = []
         if bCanUndo:
             self.Emit()
+
+    def Test(self) -> None:
+        pass
